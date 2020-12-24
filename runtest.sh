@@ -15,7 +15,7 @@ STATUS=0
 # - dir: assignment directory
 exec_javac() {
   dir=$1
-  javac -encoding utf8 -cp .:../${JUNIT4}:../${HAMCREST}:../${HTDCV6} "$dir/*.java"
+  javac -encoding utf8 -cp .:../${JUNIT4}:../${HAMCREST}:../${HTDCV6} "$dir"/*.java
 }
 
 exec_junit() {
