@@ -182,7 +182,7 @@ do_test() {
 
   [[ "$SCREENSHOT_FLG" = "true" ]] && check_screenshot
 
-  cd src || exit
+  cd src || exit 1
   for dir in $(find . -maxdepth 1 -name 'ex*' -type d | sed -e "s/^\.\///g"); do
     check_compile "${dir}"
     check_examples "${dir}"
