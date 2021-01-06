@@ -5,9 +5,6 @@ JUNIT4=junit-4.13.1.jar
 HAMCREST=hamcrest-core-1.3.jar
 HTDCV6=htdc-v6.jar
 
-JUNIT_FLG=true
-SCREENSHOT_FLG=false
-
 SCORE=0
 TOTAL=0
 
@@ -16,6 +13,11 @@ STATUS=0
 exists_junit_ignore() {
   dir=$1
   test -f "$dir/.junit_ignore"
+}
+
+exists_screenshot_ignore() {
+  dir=$1
+  test -f "$dir/.screenshot_ignore"
 }
 
 # arguments:
@@ -56,7 +58,7 @@ calc_score_total() {
   junit_ignored=$(find src -name ".junit_ignore" -type f | wc -l)
   checkpoints=$(expr $checkpoints - ${junit_ignored})
 
-  if [[ "$SCREENSHOT_FLG" = "true" ]]; then
+  if ! exists_screenshot_ignore "figure"; then
     # - figure/class-diagram.jpg exists + 1
     # - figure/ufo-draw.jpg exists + 1
     TOTAL=$(expr $checkpoints + 2)
@@ -69,23 +71,23 @@ calc_score_total() {
 
 # Check if figure/class-diagram.jpg exists
 check_class_diagram() {
-  diagram=figure/class-diagram.jpg
-  if test -f $diagram; then
-    echo "[SUCCESS] $diagram exists"
+  DIAGRAM=$(find figure/ -name "class-diagram*" -type f)
+  if test ! -z "${DIAGRAM}"; then
+    echo "[SUCCESS] class diagrams exist"
     score_up
   else
-    echo "[ERROR] $diagram not exists"
+    echo "[ERROR] class diagrams not exist"
     STATUS=1
   fi
 }
 
 check_screenshot() {
-  screenshot=figure/ufo-draw.jpg
-  if test -f $diagram; then
-    echo "[SUCCESS] $screenshot exists"
+  FIGS=$(find figure/ -name "ufo-draw*" -type f)
+  if test ! -z "${FIGS}"; then
+    echo "[SUCCESS] screenshots exist"
     score_up
   else
-    echo "[ERROR] $screenshot not exists"
+    echo "[ERROR] screenshots not exist"
     STATUS=1
   fi
 }
@@ -142,30 +144,29 @@ check_junit() {
   logfile=junit_res_${dir}.txt
   junit_status=0
 
-  examples=$(find ${dir} -name '*Examples.class' -type f | xargs -L1 -I{} basename "{}")
+  examples=$(find "${dir}" -name '*Examples.class' -type f | xargs -L1 -I{} basename "{}")
 
-  if [[ ! -z ${examples} ]]; then
+  if [[ -n ${examples} ]]; then
     for example in ${examples}; do
       echo "[TEST] executing JUnit test in ${example}..."
       target="${example%.*}"
-      exec_junit $dir.$target > ${logfile}
-      junit_out=$(cat ${logfile} | grep "^FAILURES!!!$")
+      exec_junit "$dir.$target" > "${logfile}"
+      junit_out=$(grep "^FAILURES!!!$" < "${logfile}")
       if test -z "$junit_out"; then
         echo "[SUCCESS] JUnit tests in ${example} passed."
       else
         echo "[ERROR] JUnit tests in ${example} failed."
-        cat ${logfile}
+        cat "${logfile}"
         junit_status=1
       fi
-      rm -f ${logfile}
     done
 
-    if (( $junit_status==0 )); then
+    if (( junit_status==0 )); then
       score_up
     fi
   fi
 
-  rm -f ${logfile}
+  rm -f "${logfile}"
 }
 
 clean() {
@@ -174,20 +175,18 @@ clean() {
 }
 
 do_test() {
-  clean && convert_to_utf8
-
-  calc_score_total
+  clean && convert_to_utf8 && calc_score_total
 
   check_class_diagram
 
-  [[ "$SCREENSHOT_FLG" = "true" ]] && check_screenshot
+  exists_screenshot_ignore "figure/" || check_screenshot
 
   cd src || exit 1
   for dir in $(find . -maxdepth 1 -name 'ex*' -type d | sed -e "s/^\.\///g"); do
     check_compile "${dir}"
     check_examples "${dir}"
     if ! exists_junit_ignore "${dir}"; then
-      check_junit ${dir}
+      check_junit "${dir}"
     fi
   done
   cd ..
@@ -204,8 +203,10 @@ $(basename ${0}) in a tool for autograding
 Usage:
     $(basename ${0}) [<options>]
 
+    - To ignore executing JUnit test, put '.junit_ignore' to the exercise directory
+    - To ignore checking if screenshots exist, put '.screenshot_ignore' to the figure/ directory
+
 Options:
-    -s,--screenshot    check if a screenshot is submitted
        --debug         execute as debug mode
     -h,--help          print this
 EOF
@@ -216,10 +217,6 @@ while [[ "$#" -gt 0 ]]; do
   key=$1
   shift
   case $key in
-    -s|--screenshot)
-      SCREENSHOT_FLG=true
-      shift
-      ;;
     --debug)
       set -x
       shift
