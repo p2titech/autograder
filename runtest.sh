@@ -99,7 +99,7 @@ check_screenshot() {
 # - dir: Directory name of the assignment (e.g., ex01)
 check_examples() {
   dir=$1
-  EXAMPLES=$(find ${dir} -name *Example*.class)
+  EXAMPLES=$(find ${dir} -name *Examples.class)
 
   if [ -z "${EXAMPLES}" ]; then
     echo "[ERROR] class XXXExamples for ${dir} is not compiled to .class successfully"
