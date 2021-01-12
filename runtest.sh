@@ -198,7 +198,7 @@ do_test() {
 
 usage() {
   cat <<EOF
-$(basename ${0}) in a tool for autograding
+$(basename ${0}) is a tool for autograding
 
 Usage:
     $(basename ${0}) [<options>]
