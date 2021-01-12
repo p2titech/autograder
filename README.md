@@ -4,6 +4,22 @@ This repository is used for autograding provided by GitHub Classroom.
 
 ## Usage
 
+### Initial setup
+
+Clone all assignment templates.
+
+```shell
+$ ./scripts/setup.sh
+```
+
+### Synchronize `runtest.sh`
+
+```
+$ ./scripts/sync.sh
+```
+
+## If you create an assignment template from scratch
+
 - Place `runtest.sh`, `opt/`, and other jar files on the assignment template root.
 - Set up the autograding in the admin page of GitHub Classroom.
   - Need to run `./runtest.sh` when executing auto grading.
