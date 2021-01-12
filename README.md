@@ -18,6 +18,22 @@ $ ./scripts/setup.sh
 $ ./scripts/sync.sh
 ```
 
+## About `runtest.sh`
+
+```
+runtest.sh is a tool for autograding
+
+Usage:
+    runtest.sh [<options>]
+
+    - To ignore executing JUnit test, put '.junit_ignore' to the exercise directory
+    - To ignore checking if screenshots exist, put '.screenshot_ignore' to the figure/ directory
+
+Options:
+       --debug         execute as debug mode
+    -h,--help          print this
+```
+
 ## If you create an assignment template from scratch
 
 - Place `runtest.sh`, `opt/`, and other jar files on the assignment template root.
