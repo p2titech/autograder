@@ -40,3 +40,13 @@ Options:
 - Set up the autograding in the admin page of GitHub Classroom.
   - Need to run `./runtest.sh` when executing auto grading.
   - See [the manual](https://docs.github.com/en/free-pro-team@latest/education/manage-coursework-with-github-classroom/use-autograding)
+
+
+## For developers
+
+This project uses semantic versioning for managing releases. If you are going to release the latest version, do the following instructions.
+
+```shell
+$ git tag v1.2.3 # Please add the prefix `v' to the version number.
+$ git push --tags
+```
