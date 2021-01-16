@@ -24,11 +24,15 @@ exists_screenshot_ignore() {
 # - dir: assignment directory
 exec_javac() {
   dir=$1
+  [[ -f ./"${JUNIT4}" ]]   || echo "${JUNIT4} not found" && exit 1
   javac -encoding utf8 -cp .:../${JUNIT4}:../${HAMCREST}:../${HTDCV6} $dir/*.java
 }
 
 exec_junit() {
   target=$1
+  [[ -f ./"${JUNIT4}" ]]   || echo "${JUNIT4} not found" && exit 1
+  [[ -f ./"${HAMCREST}" ]] ||  echo "${HAMCREST} not found" && exit 1
+  [[ -f ./"${HTDCV6}" ]]   ||  echo "${HTDCV6} not found" && exit 1
   java -cp .:../${JUNIT4}:../${HAMCREST}:../${HTDCV6} org.junit.runner.JUnitCore ${target}
 }
 
