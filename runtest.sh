@@ -22,7 +22,7 @@ exists_screenshot_ignore() {
 
 exists_jar() {
   for jar in "${JUNIT4}" "${HAMCREST}" "${HTDCV6}"; do
-    if [[ ! -f ./"${jar}" ]]; then
+    if [[ ! -f ../"${jar}" ]]; then
       echo "${jar} not found" && exit 1
     fi
   done
