@@ -168,6 +168,7 @@ check_junit() {
         echo "[ERROR] JUnit tests in ${example} failed."
         cat "${logfile}"
         junit_status=1
+        STATUS=1
       fi
     done
 
