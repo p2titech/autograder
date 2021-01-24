@@ -81,7 +81,7 @@ calc_score_total() {
 
 # Check if figure/class-diagram.jpg exists
 check_class_diagram() {
-  DIAGRAM=$(find figure/ -name "class-diagram*" -type f)
+  DIAGRAM=$(find figure/ -name "class-diagram*.jpg" -type f)
   if test ! -z "${DIAGRAM}"; then
     echo "[SUCCESS] class diagrams exist"
     score_up
