@@ -81,7 +81,7 @@ calc_score_total() {
 
 # Check if figure/class-diagram.jpg exists
 check_class_diagram() {
-  DIAGRAM=$(find figure/ -name "class-diagram*.jpg" -type f)
+  DIAGRAM=$(find figure/ -name "class-diagram*" -type f)
   if test ! -z "${DIAGRAM}"; then
     echo "[SUCCESS] class diagrams exist"
     score_up
@@ -161,8 +161,9 @@ check_junit() {
       echo "[TEST] executing JUnit test in ${example}..."
       target="${example%.*}"
       exec_junit "$dir.$target" > "${logfile}"
+      exit_code="$?"
       junit_out=$(grep "^FAILURES!!!$" < "${logfile}")
-      if test -z "$junit_out"; then
+      if (( exit_code==0 )) && test -z "$junit_out"; then
         echo "[SUCCESS] JUnit tests in ${example} passed."
       else
         echo "[ERROR] JUnit tests in ${example} failed."
