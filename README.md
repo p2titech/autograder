@@ -2,6 +2,10 @@
 
 This repository is used for autograding provided by GitHub Classroom.
 
+## Prerequisites
+
+- [GitHub CLI](https://github.com/cli/cli#installation).
+
 ## Usage
 
 ### Initial setup
