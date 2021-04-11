@@ -1,7 +1,6 @@
 #!/bin/bash
 
-for repo in r1 r1p2 r2p1 r2p2 r2p3 r3p1 r3p2
-do
+for repo in r1 r1p2 r2p1 r2p2 r2p3 r3p1 r3p2 r4p1 r5p1 r5p2 p6p1 r7p1; do
   cp runtest.sh assignments/"${repo}"
   pushd assignments/"${repo}" || exit
   git switch master || git switch main
